@@ -82,7 +82,7 @@ cyclistic <- list.files(path='2022-divvy-tripdata', full.names = TRUE) %>%
   bind_rows
 ```
 
-I looked up the first 6 rows in the data frame - just to get a sense of what the data was like - using `head()` function and inspected the structure of the data using the `str` function.
+I looked up the first 6 rows in the data frame - just to get a sense of what the data was like - using the `head` function and inspected the structure of the data using the `str` function.
 
 ```{r inspect-the-data}
 head(cyclistic)
@@ -186,8 +186,7 @@ I opened the CSV file in Excel which I used to create the pie chart below. I cou
 
 I used the `aggregate` function to generate the summary statistics, which I then displayed in a tabular form. The mean duration per trip for casual riders in Q1 2022 was 31M 20S and that of annual members was 11M 49S. This makes sense. Let me use this analogy to explain why: If it were possible to do a day subscription on Netflix, you would probably spend more time watching movies that day than you would if you were on a monthly (or annual) subscription. Something about getting maximum value for your money.
 
-```{r}
-# Do descriptive statistics for each rider type
+```{r descriptive-stat-for-each-rider-type}
 aggregate(ride_length ~ member_casual, data = cyclistic_v02, summary)
 summary_stat <- data.frame(
   Rider = c("Casual Rider", "Annual Member"),
