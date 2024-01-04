@@ -43,7 +43,7 @@ As a first step in my RStudio Cloud, I created a new folder in my working direct
 getwd()
 ```
 
-Then, I installed the tidyverse package, and loaded the tidyverse and knitr packages which will needed to complete the analysis.
+Then, I installed the tidyverse package, and loaded the tidyverse and knitr packages which were needed to complete the analysis.
 
 ```{r install-and-load-tidyverse}
 install.packages("tidyverse", repos = "http://cran.us.r-project.org")
@@ -296,7 +296,7 @@ More information is needed to understand why some riders (26) ended their trips 
 
 ## Final Remarks
 
-Thank you for reading this far. What do you like about this case study? What do you agree or disagree with? How might I improve? Please leave suggestions, questions, corrections or clarifications in the comments.
+Thank you for reading this far. What do you like about this case study? What do you agree or disagree with? Please leave suggestions, questions, corrections or clarifications in the comments.
 
 Oh! I'd definitely be doing more case studies. Please follow me so you don't miss out on the next one.
 
