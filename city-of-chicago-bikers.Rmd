@@ -29,13 +29,13 @@ Finance analysts working on this project had concluded that annual members are m
 
 ### Data Description
 
-The description of the data sources has been provided above. Specifically, the data analyzed in this project was from the first quarter of 2022. There were 503421 observations and 13 variables, including ride id, the type of bicycle used, when each trip started and ended, the station names, ids, longitudes, and latitudes where each trip started and ended, and the type of rider it was (casual rider or an annual member). Riders personally identifiable information was not included in the dataset, so it was impossible to compare casual riders with annual members using sociodemographic characteristics.
+The description of the data sources has been provided above. Specifically, the data analyzed in this project was from the first quarter of 2022. There were 503421 observations and 13 variables, including ride id, the type of bicycle used, when each trip started and ended, the station names, ids, longitudes, and latitudes where each trip started and ended, and the type of rider it was (casual rider or an annual member). Riders' personally identifiable information was not included in the dataset, so it was impossible to compare casual riders with annual members using sociodemographic characteristics.
 
 ### Data Cleaning
 
 The data was in three different CSV files, one for each month in the quarter, so my first intuition was to merge this data into one using Google Sheet, make a copy of the combined dataset, clean and transform it, before transferring to a SQL database management system or RStudio, where I would do further analysis.
 
-However, due to the sheer size of the dataset, running basic tasks such as extracting data from a column and using same to autofill new columns using functions and formulas took several minutes. Thus, I decided to do use R for the data analysis from start to finish.
+However, due to the sheer size of the dataset, running basic tasks such as extracting data from a column and using same to autofill new columns using functions and formulas took several minutes. Thus, I decided to use R for the data analysis from start to finish.
 
 As a first step in my RStudio Cloud, I created a new folder in my working directory and imported the data files into it. I used this command to get the path to my working directory.
 
@@ -89,7 +89,7 @@ head(cyclistic)
 str(cyclistic)
 ```
 
-The next thing I did was to check if there are columns with missing values. Six columns contained missing values, which I kept in mind, should I have to use data in these columns in subsequent steps of the analysis.
+The next thing I did was to check if there were columns with missing values. Six columns contained missing values, which I kept in mind, should I have to use data in these columns in subsequent steps of the analysis.
 
 ```{r check-for-missing-values}
 cbind(
@@ -119,6 +119,7 @@ Intuitively, I knew the `started_at` and `ended_at` columns contained only the d
 ```{r filter-out-when-ended_at-is-earlier-than-started_at}
 filter(cyclistic, ended_at < started_at)
 ```
+
 Also, I found out that there were twenty-six cases where the trip started and ended at the same times. This is something I would like to clarify with the stakeholders the possible reasons why these might have occurred.
 
 ```{r filter-out-when-ended_at-equals-started_at}
@@ -173,10 +174,10 @@ cyclistic_v02$member_casual[cyclistic_v02$member_casual == "member"] <- "Annual 
 I generated a CSV file which contained data on the number of casual riders and annual members who made a trip using Divvy bikes in the last quarter. 
 
 ```{r generate-csv-on-number-of-riders-per-group}
-write_csv(data.frame(
-  table(cyclistic_v02$member_casual)
-  ),
-  file = "riders.csv")
+write_csv(
+  data.frame(table(cyclistic_v02$member_casual)),
+  file = "riders.csv"
+)
 ```
 
 I opened the CSV file in Excel which I used to create the pie chart below. I could have used the `pie` function in R to create something similar *but I must sha use Excel in this project*. Concretely, out of the 503419 trips that were made, 74% (373603) of them were by annual members.
@@ -188,6 +189,7 @@ I used the `aggregate` function to generate the summary statistics, which I then
 
 ```{r descriptive-stat-for-each-rider-type}
 aggregate(ride_length ~ member_casual, data = cyclistic_v02, summary)
+
 summary_stat <- data.frame(
   Rider = c("Casual Rider", "Annual Member"),
   Minimum = c("0S", "0S"),
@@ -196,12 +198,12 @@ summary_stat <- data.frame(
   Maximum = c("23d 20H 34M 4S", "1d 1H 59M 54S")
 )
 
-kable(summary_stat, caption = "Descriptive statistics for each rider type")
+kable(summary_stat, caption = "Descriptive statistics on trip duration group by rider type")
 ```
 
 ### How about the average trip duration on different days?
 
-The table below showed the daily average trip duration grouped by the category of rider.
+The table below shows the daily average trip duration grouped by the category of rider.
 
 ```{r table-on-avg_ride_duration_per_day}
 avg_ride_duration_per_day <- aggregate(as.numeric(ride_length)/60 ~ member_casual + day_of_week, data = cyclistic_v02, mean)
@@ -243,7 +245,7 @@ cyclistic_v02 %>%
   coord_flip() +
   scale_fill_manual(values = c("blue", "purple")) +
   theme_minimal() +
-  labs(title = "Bicycle Used During Trips",
+  labs(title = "Bicycles Used During Trips",
        subtitle = "Casual Riders vs Annual Members",
        caption = "Data Source: Motivate Int'l Inc",
        fill = "Riders") +
@@ -279,7 +281,7 @@ Here is a recap of my key insights from this analysis:
 - Casual riders typically cycled for a longer duration than annual members.
 - Casual riders mostly used electric bikes whereas annual members mostly used classic bikes.
 - Casual riders sometimes used docked bikes while annual members never did.
-- There was a two-fold and a four-fold increase in the number of rides undertaken by annual members and casual riders from February to March 2022.
+- There was a two-fold and a four-fold increase in the number of rides undertaken by annual members and casual riders respectively from February to March 2022.
 
 ## Recommendations
 
